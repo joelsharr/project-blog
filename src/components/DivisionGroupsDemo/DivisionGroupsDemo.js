@@ -65,12 +65,12 @@ function DivisionGroupsDemo({
             {range(numOfGroups).map((groupIndex) => (
               <div key={groupIndex} className={styles.group}>
                 {range(numOfItemsPerGroup).map((index) => {
-                  const importantPart = groupIndex*numOfItemsPerGroup + index;
-                  const circleId = `${id}-${groupIndex*numOfItemsPerGroup + index}`;
+                  const itemNumber = groupIndex*numOfItemsPerGroup + index;
+                  const layoutId = `${id}-${itemNumber}`;
                   return (
                     <motion.div
-                    key={circleId}
-                    layoutId={circleId}
+                    key={layoutId}
+                    layoutId={layoutId}
                     className={styles.item}
                     />
                     );
@@ -87,8 +87,14 @@ function DivisionGroupsDemo({
             </p>
 
             {range(remainder).map((index) => {
+              const itemNumber = numOfItems - index - 1;
+              const layoutId = `${id}-${itemNumber}`;
               return (
-                <div key={index} className={styles.item} />
+                <motion.div
+                  key={layoutId}
+                  layoutId={layoutId}
+                  className={styles.item}
+                />
                 );
               })}
           </div>
