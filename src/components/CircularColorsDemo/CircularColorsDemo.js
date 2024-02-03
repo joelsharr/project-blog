@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import clsx from 'clsx';
 import {
@@ -5,6 +7,7 @@ import {
   Pause,
   RotateCcw,
 } from 'react-feather';
+import { motion } from 'framer-motion';
 
 import Card from '@/components/Card';
 import VisuallyHidden from '@/components/VisuallyHidden';
@@ -18,12 +21,24 @@ const COLORS = [
 ];
 
 function CircularColorsDemo() {
-  // TODO: This value should increase by 1 every second:
-  const timeElapsed = 0;
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [timeElapsed, setTimeElapsed] = React.useState(0);
+  const id = React.useId()
 
-  // TODO: This value should cycle through the colors in the
-  // COLORS array:
-  const selectedColor = COLORS[0];
+  React.useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      setTimeElapsed(time => time + 1);
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    }
+  }, [isPlaying]);
+
+  const selectedColor = COLORS[timeElapsed % COLORS.length];
 
   return (
     <Card as="section" className={styles.wrapper}>
@@ -38,7 +53,9 @@ function CircularColorsDemo() {
               key={index}
             >
               {isSelected && (
-                <div
+                <motion.div
+                  key={`${id}-outline`}
+                  layoutId={`${id}-outline`}
                   className={
                     styles.selectedColorOutline
                   }
@@ -69,11 +86,34 @@ function CircularColorsDemo() {
           <dd>{timeElapsed}</dd>
         </dl>
         <div className={styles.actions}>
-          <button>
-            <Play />
-            <VisuallyHidden>Play</VisuallyHidden>
-          </button>
-          <button>
+          {!isPlaying &&
+            <button
+              onClick={
+                () => setIsPlaying(true)
+              }
+            >
+              <Play />
+              <VisuallyHidden>Play</VisuallyHidden>
+            </button>
+          }
+          {isPlaying &&
+            <button
+              onClick={
+                () => setIsPlaying(false)
+              }
+            >
+              <Pause />
+              <VisuallyHidden>Pause</VisuallyHidden>
+            </button>
+          }
+          <button
+            onClick={
+              () => {
+                setIsPlaying(false);
+                setTimeElapsed(0);
+              }
+            }
+          >
             <RotateCcw />
             <VisuallyHidden>Reset</VisuallyHidden>
           </button>
