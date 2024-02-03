@@ -4,6 +4,7 @@ import { Rss, Sun, Moon } from 'react-feather';
 
 import Logo from '@/components/Logo';
 import VisuallyHidden from '@/components/VisuallyHidden';
+import DarkLightToggle from '../DarkLightToggle';
 
 import styles from './Header.module.css';
 
@@ -28,12 +29,9 @@ function Header({ theme, className, ...delegated }) {
             View RSS feed
           </VisuallyHidden>
         </button>
-        <button className={styles.action}>
-          <Sun size="1.5rem" />
-          <VisuallyHidden>
-            Toggle dark / light mode
-          </VisuallyHidden>
-        </button>
+        <DarkLightToggle
+          initialTheme={theme}
+        />
       </div>
     </header>
   );
